@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Twoje płatności{% endblock %}</title>
+        <link href="/css/reset.css" rel="stylesheet" type="text/css"/>
+        <link href="/css/styles.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        {% if app.user.userIdentifier is defined %}
+            <div class='header'>
+                Zalogowany jako {{ app.user.userIdentifier }}
+                <a href="{{ path('app_logout') }}">Wyloguj</a>
+            </div>
+            <ul class='menu'>
+                {% if  app.request.pathinfo != path('app_payments')%}
+                    <li><a href="{{ path('app_payments') }}">Moje płatności</a></li>
+                {% endif %}
+                {% if  app.request.pathinfo != path('app_add_payment') %}
+                    <li><a href="{{ path('app_add_payment') }}">Dodaj płatność</a></li>
+                {% endif %}
+            </ul>
+            {% block content %}
+            {% endblock %}
+        {% else %}
+            {% if  app.request.pathinfo == path('app_login') %}
+                {% block logincontent %}
+                {% endblock %}
+            {% elseif  app.request.pathinfo == path('app_register') %}
+                {% block registercontent %}
+                {% endblock %}
+            {% else %}
+                <a href="{{ path('app_login') }}">Zaloguj</a> się by kontynuować
+            {% endif %}
+        {% endif %}
+    </body>
+</html>

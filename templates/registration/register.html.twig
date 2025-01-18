@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Zarejestruj się!{% endblock %}
+
+{% block registercontent %}
+
+    <div class='login-form registration'>
+        <h1>Zarejestruj się</h1>
+        <div>
+            lub wróć do strony <a href="{{ path('app_login') }}">logowania</a>.
+        </div>
+        {{ form_errors(registrationForm) }}
+
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            {{ form_row(registrationForm.plainPassword, {
+                label: 'Password'
+            }) }}
+            {{ form_row(registrationForm.agreeTerms) }}
+
+            <button type="submit" class="btn">Zarejestruj się</button>
+        {{ form_end(registrationForm) }}
+    </div>
+{% endblock %}

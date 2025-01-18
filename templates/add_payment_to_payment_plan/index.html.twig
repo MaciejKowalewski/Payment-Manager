@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Czy chcesz dodać kolejną płatność?{% endblock %}
+
+{% block content %}
+
+    <div class='payment-form continue-confirm'>
+        Czy chcesz dodać kolejną płatność? 
+        <a href={{ path('app_payment_plan') }}>Tak</a>
+        <a href={{ path('app_payments') }}>Nie</a>
+    </div>
+
+{% endblock %}

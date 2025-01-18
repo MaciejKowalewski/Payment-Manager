@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+    <div class='payment-form'>
+        {{ form_start(form) }}
+        {{ form_row(form.paymentname) }}
+            {{ form_row(form.amount) }}
+            {{ form_row(form.paymentDate) }}
+            {{ form_row(form.link) }}
+            {{ form_row(form.description) }}
+            {{ form_row(form.paymenttype) }}
+            {{ form_row(form.paid) }}
+            <button type="submit" class="btn">Zapisz</button>
+        {{ form_row(form._token) }}
+        {{ form_end(form, {'render_rest': false}) }}
+        <a href='{{path('delete_payment', {'index': payment.id})}}'>Usuń płatność</a>
+    </div>
+
+{% endblock %}

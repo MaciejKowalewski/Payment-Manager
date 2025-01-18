@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ustal częstotliwość płatności{% endblock %}
+
+{% block content %}
+
+    <div class='payment-form'>
+        {{ form_errors(AddPaymentCycle) }}
+        {{ form_start(AddPaymentCycle) }}
+            {{ form_row(AddPaymentCycle.days) }}
+            {{ form_row(AddPaymentCycle.months) }}
+            {{ form_row(AddPaymentCycle.years) }}
+            <button type="submit" class="btn">Dodaj Płatność</button>
+        {{ form_row(AddPaymentCycle._token) }}
+        {{ form_end(AddPaymentCycle, {'render_rest': false}) }}
+    </div>
+
+{% endblock %}

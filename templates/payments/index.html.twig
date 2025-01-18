@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Twoje płatności{% endblock %}
+
+{% block content %}
+    <div class='select_year_form'>
+        {{ form_errors(SelectYear) }}
+        {{ form_start(SelectYear) }}
+            {{ form_row(SelectYear.previousYear) }}
+            <p>{{SelectedYear}}</p>
+            {{ form_row(SelectYear.nextYear) }}
+            {{ form_row(SelectYear._token) }}
+        {{ form_end(SelectYear, {'render_rest': false}) }}
+    </div>
+
+    <div>
+        {% for key,years in payments %}
+            {% if key == 'overdue' and years is not empty %}
+                <div class='overdue'>
+                   {% if years is not empty %}
+                    <p>Zaległe płatności (Całkowita kwota do zapłaty: {{years|first}} zł):</p>
+                        <ul>
+                        {% for payment in years[1:] %}
+                            <li class="payment">
+                                <a href="{{ path('app_payment', {index: payment.id})}}">
+                                    <div >
+                                        <b> {{ payment.paymentName }} </b> |
+                                        Kwota do zapłaty: {{ payment.amount }} PLN |
+                                        Termin zapłaty: {{ payment.paymentDate|date("d/m/Y") }}
+                                        {% if payment.description is not empty %}
+                                        | Opis: {{ payment.description }}
+                                        {% endif %}
+                                    </div>
+                                </a>
+                            </li> 
+                        {% endfor %} 
+                    {% else %}
+                        <p>Brak zaległych płatności</p>
+                    {% endif %}
+                </ul>
+            </div>
+                {% else %}
+                <div class='payments'>
+                    <p>{{key}}</p>
+                    {% for key,month in years %}
+                        {% if key == 'January' %}
+                            <div class='month'>
+                            <p>Styczeń (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'February' %}
+                            <div class='month'>
+                            <p>Luty (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'March' %}
+                            <div class='month'>
+                            <p>Marzec (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'April' %}
+                            <div class='month'>
+                            <p>Kwiecień (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'May' %}
+                            <div class='month'>
+                            <p>Maj (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'June' %}
+                            <div class='month'>
+                            <p>Czerwiec (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'July' %}
+                            <div class='month'>
+                            <p>Lipiec (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'August' %}
+                            <div class='month'>
+                            <p>Sierpień (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'September' %}
+                            <div class='month'>
+                            <p>Wrzesień (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'October' %}
+                            <div class='month'>
+                            <p>Październik (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'November' %}
+                            <div class='month'>
+                            <p>Listopad (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% elseif key == 'December' %}
+                            <div class='month'>
+                            <p>Grudzień (Całkowita kwota do zapłaty: {{month|first}} zł):</p>
+                        {% endif %}
+                        <ul>
+                            {% for payment in month[1:] %}
+                                <li class="payment">
+                                    <a href="{{ path('app_payment', {index: payment.id})}}">
+                                        <div >
+                                            <b> {{ payment.paymentName }} </b> |
+                                            Kwota do zapłaty: {{ payment.amount }} PLN |
+                                            Termin zapłaty: {{ payment.paymentDate|date("d/m/Y") }}
+                                            {% if payment.description is not empty %}
+                                            | Opis: {{ payment.description }}
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                </li>   
+                            {% endfor %}
+                        </ul>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+    </div>
+{% endblock %}

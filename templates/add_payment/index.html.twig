@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dodaj płatność{% endblock %}
+
+{% block content %}
+
+    <div class='payment-form'>
+        {{ form_errors(AddPaymentType) }}
+        {{ form_start(AddPaymentType) }}
+            {{ form_row(AddPaymentType.paymentname) }}
+            {{ form_row(AddPaymentType.amount) }}
+            {{ form_row(AddPaymentType.paymentDate) }}
+            {{ form_row(AddPaymentType.link) }}
+            {{ form_row(AddPaymentType.description) }}
+            {{ form_row(AddPaymentType.paymenttype) }}
+            <button type="submit" class="btn">Dodaj Płatność</button>    
+            {{ form_row(AddPaymentType._token) }}
+        {{ form_end(AddPaymentType, {'render_rest': false}) }}
+    </div>
+
+{% endblock %}
