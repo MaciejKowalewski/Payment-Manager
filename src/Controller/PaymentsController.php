@@ -48,8 +48,9 @@ class PaymentsController extends AbstractController
         if($loggedUser){
             $paymentsArray = $this->paymentsRepository->findBy(['email' => $loggedUser, 'isPaid'=> 'f']);
             $selectedPayments = $this->paymentsProvider->transformDataForTwig($paymentsArray, $selectedYear);
+        }else{
+            return $this->redirectToRoute('app_login');
         }
-        //dd($selectedPayments);
         return $this->render('payments/index.html.twig', [
             'controller_name' => 'PaymentsController',
             'payments' => $selectedPayments,

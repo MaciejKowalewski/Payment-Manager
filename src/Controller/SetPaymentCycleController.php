@@ -39,12 +39,12 @@ class SetPaymentCycleController extends AbstractController
             $cyclicPayment->setPayment($payment);
             if($cyclicPayment->getDays() === null && $cyclicPayment->getMonths() === null && $cyclicPayment->getYears() === null){
                 $payment->setPaymentType('one-time');
-                $this->entityManager->persist($payment);
-                $this->entityManager->flush();
             }else{
+                $payment->setPaymentType('cyclic');
                 $this->entityManager->persist($cyclicPayment);
-                $this->entityManager->flush();
             }
+            $this->entityManager->persist($payment);
+            $this->entityManager->flush();
             return $this->redirectToRoute('app_payments');
         }
 

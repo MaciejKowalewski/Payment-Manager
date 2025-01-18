@@ -38,7 +38,6 @@ class PaymentsProvider{
 
     public function getVirtualPayments(array $paymentsArray, $selectedYear): array{
         foreach($paymentsArray as $payment){
-            dd($payment->getCyclicPayments()->getDays());
             if(!$payment->isPaid()){
                 if($payment->getPaymentType()==='cyclic'){
                     $virtualPayment = clone $payment;

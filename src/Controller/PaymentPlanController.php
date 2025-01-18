@@ -35,6 +35,8 @@ class PaymentPlanController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $paymentPlan->setPayments($payment);
+            $payment->setPaymentType('paymentPlan');
+            $this->entityManager->persist($payment);
             $this->entityManager->persist($paymentPlan);
             $this->entityManager->flush();
 

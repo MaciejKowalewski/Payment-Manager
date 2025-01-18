@@ -36,11 +36,17 @@ class AddPaymentController extends AbstractController
             if($payment->getPaymentType()==='cyclic'){
                 $session = $request->getSession();
                 $session->set('PaymentId', $payment->getId());
+                $payment->setPaymentType('one-time');
+                $entityManager->persist($payment);
+                $entityManager->flush();
                 return $this->redirectToRoute('app_set_payment_cycle');
             }
             elseif($payment->getPaymentType()==='paymentPlan'){
                 $session = $request->getSession();
                 $session->set('PaymentId', $payment->getId());
+                $payment->setPaymentType('one-time');
+                $entityManager->persist($payment);
+                $entityManager->flush();
                 return $this->redirectToRoute('app_payment_plan');
             }
             else{
