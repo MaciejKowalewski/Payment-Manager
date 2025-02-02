@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
+
 use App\Form\AddPaymentType;
+use App\Repository\PaidRepository;
 use App\Repository\PaymentPlanRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\PaymentUserRepository;
 use App\Repository\PaymentsRepository;
+use App\Service\PaymentProvider;
 use Symfony\Bundle\SecurityBundle\Security;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +24,8 @@ class PaymentController extends AbstractController
         private PaymentsRepository $paymentsRepository,
         private PaymentPlanRepository $paymentPlanRepository,
         private EntityManagerInterface $entityManager,
+        private PaidRepository $paidRepository,
+        private PaymentProvider $paymentProvider
     )
     {}
 
@@ -34,33 +39,11 @@ class PaymentController extends AbstractController
 
         if($loggedUserId === $loggedUserPaymentId){
             $payment = $this->paymentsRepository->findOneBy(['id' => $index]);
+
             $form = $this->createForm(AddPaymentType::class, $payment);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
-                $payment->setEmail($loggedUser);
-                $payment->setAmount(sprintf('%.2f',$payment->getAmount()));
-                if($payment->isPaid() === True){
-                    if($payment->getPaymentType() === 'cyclic'){
-                        $date = new \DateTimeImmutable($payment->getPaymentDate()->format('Y-m-d'));
-                        $day = intval($payment->getCyclicPayments()->first()->getDays());
-                        $month = intval($payment->getCyclicPayments()->first()->getMonths());
-                        $year = intval($payment->getCyclicPayments()->first()->getYears());
-                        $payment->setPaymentDate($date->modify('+'.$year.' year, +'.$month.' month, +'.$day.' day'));
-                        $payment->setPaid(False);
-                        $this->entityManager->persist($payment);
-                    }elseif($payment->getPaymentType() === 'paymentPlan'){
-                        if($payment->getPaymentPlan()->first()){
-                            $payment->setPaymentDate($payment->getPaymentPlan()->first()->getPaymentDate());
-                            $paymentToDel = $this->paymentPlanRepository->findOneby(['id' => $payment->getPaymentPlan()->first()->getId()]);
-                            $this->entityManager->remove($paymentToDel);
-                        }else{
-                            $this->entityManager->remove($payment);
-                        }
-                        $payment->setPaid(False);
-                    }
-                }
-                $this->entityManager->flush();
-                return $this->redirectToRoute('app_payments');
+                $this->paymentProvider->transformDataForTwig($payment, $loggedUser);
             }
         }
         

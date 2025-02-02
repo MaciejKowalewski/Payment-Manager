@@ -16,21 +16,29 @@ class PaymentsRepository extends ServiceEntityRepository
         parent::__construct($registry, Payments::class);
     }
 
-    public function findByIdYearIsPaid(int $email_id, string $payment_date, string $is_paid): array{
+    public function findByIdAndYear(int $email_id, string $payment_date): array{
 
         $payment_date = date('Y-m-d',strtotime($payment_date.'-12-31'));
 
         $conn = $this->getEntityManager()->getConnection();
 
-        $sql = 'SELECT * FROM payments WHERE email_id = :email_id AND payment_date < :payment_date AND is_paid = :is_paid';
+        $sql = 'SELECT * FROM payments WHERE email_id = :email_id AND payment_date < :payment_date';
 
         $resultSet = $conn->executeQuery($sql, [
             'email_id' => $email_id,
-            'payment_date' => $payment_date,
-            'is_paid' => $is_paid
+            'payment_date' => $payment_date
         ]);
 
-        return $resultSet->fetchAllAssociative();
+        $paymentsList = [];
+        //$normalizer = new GetSetMethodNormalizer();
+
+        foreach($resultSet->fetchAllAssociative() as $array){
+            foreach($array as $arrayPayment){
+                //$payment = $normalizer->denormalize(Payments::class, $arrayPayment);
+            }
+        }
+
+        return $paymentsList;
     }
 
     //    /**

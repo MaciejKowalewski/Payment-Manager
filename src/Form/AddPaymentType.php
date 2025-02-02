@@ -36,7 +36,7 @@ class AddPaymentType extends AbstractType
                 'label' => 'Opis',
             ])
             ->add('email', EntityType::class, [
-                'class' => paymentuser::class,
+                'class' => paymentUser::class,
                 'choice_label' => 'id',
             ])
             ->add('paymenttype', ChoiceType::class, [
